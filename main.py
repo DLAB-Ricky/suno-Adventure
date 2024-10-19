@@ -28,7 +28,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # TODO - 선생님의 리뷰 : dino를 딕셔너리화해서 체계적으로 관리했으면 좋겠습니다.
 dino = pygame.draw.rect(screen, WHITE, (20, 570, 70, 70))
-
+dino_img = pygame.image.load("dino.png")
 hurdle = pygame.draw.rect(screen, WHITE, (1000, 570, 35, 70))
 
 prev_time = pygame.time.get_ticks()
@@ -70,4 +70,5 @@ while True:
     pygame.draw.rect(screen, WHITE, hurdle)
     score_text = font.render(f"Score:{score}", True, WHITE)
     screen.blit(score_text, (10, 10))
+    screen.blit(dino)
     pygame.display.flip()
