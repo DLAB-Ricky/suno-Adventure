@@ -26,6 +26,7 @@ font = pygame.font.Font(None, 36)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+# TODO - 선생님의 리뷰 : dino를 딕셔너리화해서 체계적으로 관리했으면 좋겠습니다.
 dino = pygame.draw.rect(screen, WHITE, (20, 570, 70, 70))
 
 hurdle = pygame.draw.rect(screen, WHITE, (1000, 570, 35, 70))
@@ -53,6 +54,7 @@ while True:
     if keyinput[K_SPACE]:
         isjump = True
 
+    # 점프 기능
     if isjump:
         if jumpstep >= -10:
             dino.top -= jumpstep * abs(jumpstep)
