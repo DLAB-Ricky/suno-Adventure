@@ -29,7 +29,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 bgimage = pygame.image.load("real-bg.png")
 bgimage = pygame.transform.scale(bgimage, (WIDTH, HEIGHT))
 dino = {
-    "rect": pygame.draw.rect(screen, WHITE, (20, 333, 1, 1)),
+    "rect": pygame.draw.rect(screen, WHITE, (20, 333, 60, 60)),
     "image": pygame.transform.scale(pygame.image.load("dino.png"), (70,70))
 }
 
@@ -82,7 +82,7 @@ while True:
     if dino['rect'].colliderect(hurdle):
         break
     else:
-        hurdle.x -= 5
+        hurdle.x -= 10
 
     # auto_increment_score()
     screen.blit(bgimage, (backX, 0))
