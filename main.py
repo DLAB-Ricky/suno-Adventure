@@ -29,11 +29,11 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 bgimage = pygame.image.load("real-bg.png")
 bgimage = pygame.transform.scale(bgimage, (WIDTH, HEIGHT))
 dino = {
-    "rect": pygame.draw.rect(screen, WHITE, (20, 333, 60, 60)),
+    "rect": pygame.draw.rect(screen, WHITE, (20, 333, 1, 1)),
     "image": pygame.transform.scale(pygame.image.load("dino.png"), (70,70))
 }
 
-hurdle = pygame.draw.rect(screen, WHITE, (1000, 570, 35, 70))
+hurdle = pygame.draw.rect(screen, BLACK, (800, 333, 35, 70))
 
 
 isjump = False
@@ -49,7 +49,7 @@ while True:
             pygame.quit()
             sys.exit()
 
-    hurdle.x -= 10
+
 
     keyinput = pygame.key.get_pressed()
     if keyinput[K_UP] and dino["rect"].top >= 0:
@@ -77,13 +77,23 @@ while True:
     if backX2 < WIDTH * -1:
         backX2 = WIDTH
 
+    # 허들
+    # TODO : 닿자마자 게임이 종료되는 기능을 구현하고 싶어요
+    if dino['rect'].colliderect(hurdle):
+        break
+    else:
+        hurdle.x -= 5
 
     # auto_increment_score()
     screen.blit(bgimage, (backX, 0))
     screen.blit(bgimage, (backX2, 0))
     pygame.draw.rect(screen, WHITE, dino['rect'])
-    pygame.draw.rect(screen, WHITE, hurdle)
+    pygame.draw.rect(screen, BLACK, hurdle)
     score_text = font.render(f"Score:{score}", True, WHITE)
     screen.blit(score_text, (10, 10))
     screen.blit(dino["image"], dino["rect"])
     pygame.display.update()
+
+# 게임 종료
+pygame.quit()
+sys.exit()
