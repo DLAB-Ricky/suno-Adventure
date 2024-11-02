@@ -4,13 +4,14 @@ import random
 
 pygame.init()
 
-# def auto_increment_score():
-#     global score, prev_time
-#     current_time = pygame.time.get_ticks()
-#     if current_time - prev_time >= 100:
-#         score += 1
-#         prev_time = current_time
+def auto_increment_score():
+    global score, prev_time
+    current_time = pygame.time.get_ticks()
+    if current_time - prev_time >= 100:
+        score += 1
+        prev_time = current_time
 
+prev_time = 0
 
 WIDTH = 1000
 HEIGHT = 800
@@ -26,11 +27,12 @@ font = pygame.font.Font(None, 36)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+
 bgimage = pygame.image.load("real-bg.png")
 bgimage = pygame.transform.scale(bgimage, (WIDTH, HEIGHT))
 dino = {
     "rect": pygame.draw.rect(screen, WHITE, (20, 333, 60, 60)),
-    "image": pygame.transform.scale(pygame.image.load("dino.png"), (70,70))
+    "image": pygame.transform.scale(pygame.image.load("dino.png"), (70, 70))
 }
 
 hurdle = pygame.draw.rect(screen, BLACK, (800, 333, 35, 70))
@@ -65,7 +67,7 @@ while True:
 
     # 점프 기능
     if isjump:
-        if jumpstep >= -10:
+        if jumpstep >= - 10:
             dino["rect"].top -= jumpstep * abs(jumpstep)
             jumpstep -= 1
         else:
@@ -73,9 +75,9 @@ while True:
             jumpstep = 10
 
     if backX < WIDTH * -1:
-        backX = WIDTH
+        backX = WIDTH - 50
     if backX2 < WIDTH * -1:
-        backX2 = WIDTH
+        backX2 = WIDTH - 50
 
     # 허들
     # TODO : 닿자마자 게임이 종료되는 기능을 구현하고 싶어요
@@ -84,12 +86,12 @@ while True:
     else:
         hurdle.x -= 10
 
-    # auto_increment_score()
+    auto_increment_score()
     screen.blit(bgimage, (backX, 0))
     screen.blit(bgimage, (backX2, 0))
     pygame.draw.rect(screen, WHITE, dino['rect'])
     pygame.draw.rect(screen, BLACK, hurdle)
-    score_text = font.render(f"Score:{score}", True, WHITE)
+    score_text = font.render(f"Score:{score}", True, BLACK)
     screen.blit(score_text, (10, 10))
     screen.blit(dino["image"], dino["rect"])
     pygame.display.update()
