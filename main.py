@@ -1,8 +1,14 @@
 import pygame, sys
 from pygame.locals import *
 import random
-SEC = 1000
+
 pygame.init()
+
+# 사용자 정의 이벤트 ID
+TIMER_EVENT = pygame.USEREVENT + 1
+
+# 타이머 설정: 5000ms마다 TIMER_EVENT 이벤트 발생
+pygame.time.set_timer(TIMER_EVENT, 5000)
 
 def auto_increment_score():
     global score, prev_time
@@ -14,11 +20,21 @@ def auto_increment_score():
 prev_time = 0
 giant = False
 
+# 화면 크기
 WIDTH = 1000
 HEIGHT = 800
-
+# 시간
+SEC = 1000
+# 색상
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+
+# 위치
+GROUND_HEIGHT = 407
+
+# 공룡 크기
+NORMAL_DINO = 60
+GIANT_DINO = 120
 
 clock = pygame.time.Clock()
 
@@ -32,8 +48,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 bgimage = pygame.image.load("real-bg.png")
 bgimage = pygame.transform.scale(bgimage, (WIDTH, HEIGHT))
 dino = {
-    "rect": pygame.draw.rect(screen, WHITE, (20, 333, 60, 60)),
-    "giant_rect": pygame.draw.rect(screen, WHITE, (20, 273, 120, 120)),
+    "rect": pygame.draw.rect(screen, WHITE, (20, HEIGHT - GROUND_HEIGHT - NORMAL_DINO, NORMAL_DINO, NORMAL_DINO)),
+    "giant_rect": pygame.draw.rect(screen, WHITE, (20, HEIGHT - GROUND_HEIGHT - GIANT_DINO, GIANT_DINO, GIANT_DINO)),
     "image": pygame.transform.scale(pygame.image.load("dino.png"), (70, 70)),
     "giant_image": pygame.transform.scale(pygame.image.load("dino.png"), (140, 140))
 }
@@ -41,8 +57,9 @@ water = {
     "rect": pygame.draw.rect(screen, WHITE, (800, 333, 60, 60)),
     "image": pygame.transform.scale(pygame.image.load("물컵2.0.png"), (70, 70))
 }
-hurdle = pygame.draw.rect(screen, BLACK, (800, 333, 35, 70))
 
+
+hurdlelist = []
 
 isjump = False
 jumpstep = 10
@@ -50,22 +67,21 @@ backX = 0
 backX2 = WIDTH
 
 while True:
+
     mode = ["rect", "giant_rect"][giant]
-    pygame.time.delay(3)
     screen.fill(BLACK)
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-
-
+        if event.type == TIMER_EVENT:
+            hurdle = {
+                "rect": pygame.draw.rect(screen, WHITE, (800, 333, 60, 60)),
+                "image": pygame.transform.scale(pygame.image.load("선인장 인데요.png"), (60, 60))
+            }
+            hurdlelist.append(hurdle)
 
     keyinput = pygame.key.get_pressed()
-    if keyinput[K_UP] and dino["rect"].top >= 0:
-        dino["rect"].top -= 5
-    elif keyinput[K_DOWN] and dino["rect"].bottom <= HEIGHT:
-        dino["rect"].bottom += 5
-
     if keyinput[K_SPACE]:
         isjump = True
 
@@ -86,27 +102,29 @@ while True:
     if backX2 < WIDTH * -1:
         backX2 = WIDTH - 100
 
-    # 허들
-    if dino[mode].colliderect(hurdle):
-        if not giant:
-            break
+    for hurdle in hurdlelist:
+        # 허들
+        if dino[mode].colliderect(hurdle["rect"]):
+            if not giant:
+                break
+            hurdlelist.remove(hurdle)
         else:
-            hurdle = None
-    else:
-        hurdle.x -= 10
-        water["rect"].x -= random.randint(15, 25)
+            hurdle["rect"].x -= 10
+            water["rect"].x -= random.randint(15, 25)
 
+    # 물약
     if dino['rect'].colliderect(water["rect"]):
         giant = True
         prev_time = pygame.time.get_ticks()
 
-    if giant and prev_time + 10 * SEC < pygame.time.get_ticks():
+    if giant and prev_time + 10 * SEC < pygame.time.get_ticks() and isjump == False:
         giant = False
 
     screen.blit(bgimage, (backX, 0))
     screen.blit(bgimage, (backX2, 0))
     pygame.draw.rect(screen, WHITE, dino['rect'])
-    pygame.draw.rect(screen, BLACK, hurdle)
+    for hurdle in hurdlelist:
+        pygame.draw.rect(screen, BLACK, hurdle["rect"])
     score_text = font.render(f"Score:{score}", True, BLACK)
     screen.blit(score_text, (10, 10))
     screen.blit(dino[["image", "giant_image"][giant]], dino[["rect", "giant_rect"][giant]])
