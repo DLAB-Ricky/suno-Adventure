@@ -165,7 +165,7 @@ while True:
     for water in waterlist:
         screen.blit(water["image"], water["rect"])
     for hurdle in hurdlelist:
-        pygame.draw.rect(screen, BLACK, hurdle["rect"])
+        screen.blit(hurdle["image"], hurdle["rect"])
     score_text = font.render(f"Score:{score}", True, BLACK)
     screen.blit(score_text, (10, 10))
     screen.blit(dino[["image", "giant_image"][giant]], dino[["rect", "giant_rect"][giant]])
