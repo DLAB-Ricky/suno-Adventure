@@ -19,9 +19,8 @@ HURDLE_EVENT = pygame.USEREVENT + 4
 pygame.time.set_timer(TIMER_EVENT, 5000)
 pygame.time.set_timer(HURDLE_EVENT, 2000)
 pygame.time.set_timer(WATER_EVENT, 60000)
-pygame.time.set_timer(DINO_EVENT, 5)  # DINO_EVENT를 더 자주 실행하도록 설정
-speed = 20
-ping = 100
+pygame.time.set_timer(DINO_EVENT, 100)  # DINO_EVENT를 더 자주 실행하도록 설정
+speed = DEFAULT_SPEED
 
 def auto_increment_score():
     global score, prev_time
@@ -36,7 +35,7 @@ dino_motion_num = 0  # 처음은 0 (dino 노말 상태)
 # 초기 설정
 clock = pygame.time.Clock()
 score = 0
-font = pygame.font.Font(None, 36)
+font = pygame.font.Font( None, 36)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 bg = Background(WIDTH,HEIGHT)
 
@@ -49,7 +48,7 @@ water = {
 }
 
 # 장애물 리스트 초기화
-hurdles = [Hurdle(WIDTH, HEIGHT - GROUND_HEIGHT + 10)]
+hurdles = []
 waterlist = [water]
 
 water_buf_start_time = 0
@@ -75,7 +74,7 @@ while True:
             dino.animate(speed)
         if event.type == HURDLE_EVENT:
             # 허들 생성
-            hurdles.append(Hurdle(WIDTH, HEIGHT - GROUND_HEIGHT + 10, 20))
+            hurdles.append(Hurdle(WIDTH, HEIGHT - GROUND_HEIGHT + 10))
 
     keys = pygame.key.get_pressed()
     if keys[K_SPACE]:
@@ -83,7 +82,6 @@ while True:
 
     if score % 100 == 0:
         speed += 2.5
-        ping += 25
         pygame.time.set_timer(DINO_EVENT, 35)
 
 
@@ -126,7 +124,7 @@ while True:
 
 
     # 점수 출력
-    score_text = font.render(f"Score: {score}", True, BLACK)
+    score_text = font.render(f"Score: {score}", True, WHITE)
     screen.blit(score_text, (10, 10))
 
     pygame.display.update()

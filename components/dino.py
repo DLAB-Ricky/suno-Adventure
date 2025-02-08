@@ -1,6 +1,7 @@
 import sys
 
 import pygame
+from settings import *
 
 class Dino:
     def __init__(self, x, y, normal_size=(80, 80), giant_size=(160, 160)):
@@ -11,15 +12,15 @@ class Dino:
 
         # 공룡 애니메이션 이미지 로드
         self.normal_frames = [
-            pygame.transform.scale(pygame.image.load(f"assets/images/dino{i}.png"), normal_size)
+            pygame.transform.scale(pygame.image.load(f"assets/images/dino{i}.png"), normal_size).convert_alpha()
             for i in range(1,7)
         ]
         self.giant_frames = [
-            pygame.transform.scale(pygame.image.load(f"assets/images/dino{i}.png"), giant_size)
+            pygame.transform.scale(pygame.image.load(f"assets/images/dino{i}.png"), giant_size).convert_alpha()
             for i in range(1,7)
         ]
         self.kick_frames = [
-            pygame.transform.scale(pygame.image.load(f"assets/images/kick{i}.png"), giant_size)
+            pygame.transform.scale(pygame.image.load(f"assets/images/kick{i}.png"), giant_size).convert_alpha()
             for i in range(1,4)
         ]
 
@@ -39,8 +40,12 @@ class Dino:
 
         # 초기 이미지
         self.current_image = self.normal_frames[0]
-        self.rect = pygame.Rect(x, y - normal_size[1], normal_size[0], normal_size[1])
-        self.giant_rect = pygame.Rect(x, y - giant_size[1], giant_size[0], giant_size[1])
+        self.rect = self.normal_frames[0].get_rect(bottomleft=(x, y))
+        self.rect.inflate_ip(-10, 0)
+        self.giant_rect = self.giant_frames[0].get_rect()
+        #
+        # self.rect = pygame.Rect(x-20, y - normal_size[1], normal_size[0], normal_size[1])
+        # self.giant_rect = pygame.Rect(x-20, y - giant_size[1], giant_size[0], giant_size[1])
 
     def toggle_giant_mode(self, is_giant):
         """거대화 모드 전환"""
@@ -50,7 +55,7 @@ class Dino:
 
     def animate(self, speed):
         """애니메이션 처리"""
-        self.frame_delay = max(1, int(10 / speed))  # speed가 높을수록 delay가 줄어듦
+        self.frame_delay = max(1, int(DEFAULT_SPEED / speed))  # speed가 높을수록 delay가 줄어듦
 
         if self.is_kicking:
             self.frame_counter += 1
@@ -75,7 +80,7 @@ class Dino:
         """점프 처리"""
         if self.is_jumping:
             if self.jump_step >= - 7:
-                self.rect.y -= self.jump_step * abs(self.jump_step)
+                self.rect.y -= self.jump_step * abs(self.jump_step)*1.25
                 self.jump_step -= 1
             else:
                 self.is_jumping = False
@@ -109,6 +114,7 @@ class Dino:
         """공룡을 화면에 그리기"""
         rect = self.giant_rect if self.is_giant else self.rect
         screen.blit(self.current_image, rect)
+        pygame.draw.rect(screen, (0, 255, 0), self.rect, 2)
 
 
 
