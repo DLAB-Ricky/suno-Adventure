@@ -1,6 +1,6 @@
 import pygame
 from settings import *
-
+#클래스
 class Hurdle:
     def __init__(self, x, y, speed=DEFAULT_SPEED, size=(90, 90)):
         self.image = pygame.transform.scale(pygame.image.load("assets/images/cac3.png"), size)

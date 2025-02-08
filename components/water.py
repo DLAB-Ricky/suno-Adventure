@@ -1,6 +1,6 @@
 import pygame
 import random
-
+#클래스
 class Water:
     def __init__(self, x, y, size, image):
         self.rect = pygame.Rect(x, y, size, size)

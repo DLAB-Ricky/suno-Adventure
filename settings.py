@@ -1,4 +1,5 @@
 import pygame
+#새팅
 # 화면 크기
 WIDTH = 1000
 HEIGHT = 360

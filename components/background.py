@@ -1,5 +1,5 @@
 import pygame
-
+#클래스
 class Background:
     def __init__(self, width, height):
         self.image = pygame.image.load("assets/images/hell.jpg")

@@ -2,7 +2,7 @@ import sys
 
 import pygame
 from settings import *
-
+#클래스
 class Dino:
     def __init__(self, x, y, normal_size=(80, 80), giant_size=(160, 160)):
         self.x = x

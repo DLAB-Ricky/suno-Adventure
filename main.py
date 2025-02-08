@@ -46,7 +46,7 @@ water = {
     "rect": pygame.Rect(800, 290, 60, 60),
     "image": pygame.transform.scale(pygame.image.load("assets/images/water.png"), (70, 70))
 }
-
+#1
 # 장애물 리스트 초기화
 hurdles = []
 waterlist = [water]
