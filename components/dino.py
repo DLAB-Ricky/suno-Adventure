@@ -61,9 +61,7 @@ class Dino:
             self.frame_counter += 1
             if self.frame_counter >= self.frame_delay:
                 self.frame_counter = 0
-                self.kick_frame_index += 1
-            if self.kick_frame_index >= len(self.kick_frames):
-                self.kick_frame_index = 0
+                self.kick_frame_index = (self.kick_frame_index+1) % len(self.kick_frames)
             self.current_image = self.kick_frames[self.kick_frame_index]
         else:
             # 걷기 애니메이션 처리

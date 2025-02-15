@@ -1,11 +1,11 @@
-import pygame, sys
+import sys
+
 from pygame.locals import *
-import random
-from settings import *
+
+from compon:ents.background import Background
 from components.dino import Dino
 from components.hurdle import Hurdle
-from components.water import Water
-from components.background import Background
+from settings import *
 
 pygame.init()
 
@@ -21,6 +21,8 @@ pygame.time.set_timer(HURDLE_EVENT, 2000)
 pygame.time.set_timer(WATER_EVENT, 60000)
 pygame.time.set_timer(DINO_EVENT, 100)  # DINO_EVENT를 더 자주 실행하도록 설정
 speed = DEFAULT_SPEED
+
+max_speed = 25
 
 def auto_increment_score():
     global score, prev_time
@@ -50,7 +52,6 @@ water = {
 # 장애물 리스트 초기화
 hurdles = []
 waterlist = [water]
-
 water_buf_start_time = 0
 
 
@@ -81,12 +82,12 @@ while True:
         dino.is_jumping = True
 
     if score % 100 == 0:
-        speed += 2.5
-        pygame.time.set_timer(DINO_EVENT, 35)
+        speed = min(speed +2.5, max_speed)
+        pygame.time.set_timer(DINO_EVENT, max(35, 120 - 20 * 2))
 
 
     for hurdle in hurdles:
-        hurdle.move()
+        hurdle.move(speed,1 )
         if hurdle.rect.right < 0:  # 화면을 벗어난 장애물 제거
             hurdles.remove(hurdle)
 
@@ -128,4 +129,4 @@ while True:
     screen.blit(score_text, (10, 10))
 
     pygame.display.update()
-    clock.tick(30)
+    clock.tick(min(60, 30 + speed // 2))
